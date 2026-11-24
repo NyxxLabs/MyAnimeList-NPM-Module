@@ -399,7 +399,8 @@ new MyAnimeList({
     }
 
     async getSeasonalAnime(settings) {
-        const seasonsList = ['winter', 'spring', 'summer', 'fall']
+        const seasonsList = ['winter', 'spring', 'summer', 'fall'];
+        const sortType = ['anime_score', 'anime_num_list_users'];
         async function getSeason() {
             var data = new Date()
             var month = data.getUTCMonth()
@@ -442,9 +443,18 @@ new MyAnimeList({
         await this.#checkParam("getSeasonalAnime", "offset", offset, 0, null);
 
         var nsfw = settings?.nsfw ?? false
-        if (nsfw === true) { nsfw = `&nsfw=true` } else { nsfw = `&nsfw=false` }
+        if (nsfw === true) { nsfw = `&nsfw=true` } else { nsfw = `&nsfw=false` };
 
-        const url = `https://api.myanimelist.net/v2/anime/season/${year}/${season}?offset=${offset}&limit=${limit}${fields}${nsfw}`;
+        var sort = settings?.sort ?? null;
+        if (sort != null) {
+            if (!sortType.includes(sort))
+                throw new MalError(`The "sort" field must be ${sortType.join(" or ")}`);
+            sort = `&sort=${sort}`;
+        } else {
+            sort = "";
+        }
+
+        const url = `https://api.myanimelist.net/v2/anime/season/${year}/${season}?offset=${offset}&limit=${limit}${fields}${nsfw}${sort}`;
 
         var token = settings?.token ?? null;
         if (token && typeof (token) != "string") throw new MalError(`Please provide a valid token: getSeasonalAnime({ token: string })`);

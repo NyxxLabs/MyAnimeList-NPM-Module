@@ -110,6 +110,10 @@ export type BoardCategory =
     | "General"
     | "Archive";
 
+export type SeasonalAnimeSort =
+    | "anime_score"
+    | "anime_num_list_users";
+
 export type AnimeField = CommonField | AnimeSpecificField;
 export type MangaField = CommonField | MangaSpecificField;
 export type GetAnimeListField = AnimeField | "list_status";
@@ -160,6 +164,7 @@ export interface SeasonalAnimeOptions {
     limit?: number;
     offset?: number;
     nsfw?: boolean;
+    sort?: SeasonalAnimeSort;
 }
 
 export interface MangaInfoOptions {
